@@ -8,7 +8,7 @@ void pushScreen(BuildContext context, Widget widget) {
   );
 }
 
-void pushReplacement(BuildContext context, Widget widget) {
+void pushReplacementScreen(BuildContext context, Widget widget) {
   Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: (context) => widget, fullscreenDialog: true),

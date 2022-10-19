@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_chat_app/helpers/functions.dart';
+import 'package:qr_chat_app/screens/home.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
+import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -37,6 +40,15 @@ class LoginScreen extends StatelessWidget {
                           keyboardType: TextInputType.emailAddress,
                           labelText: 'メールアドレス',
                           iconData: Icons.email,
+                        ),
+                        const SizedBox(height: 16),
+                        RoundLgButton(
+                          labelText: '認証する',
+                          labelColor: Colors.white,
+                          backgroundColor: Colors.blue,
+                          onPressed: () {
+                            pushReplacementScreen(context, const HomeScreen());
+                          },
                         ),
                       ],
                     ),
