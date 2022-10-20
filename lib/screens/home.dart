@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/screens/chat.dart';
 import 'package:qr_chat_app/screens/room_add.dart';
@@ -40,11 +41,23 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => overlayScreen(context, const RoomAddScreen()),
-        label: const Text('ルーム追加'),
-        icon: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        curve: Curves.bounceIn,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.create),
+            backgroundColor: Colors.blue,
+            label: 'ルームを作成',
+            onTap: () => overlayScreen(context, const RoomAddScreen()),
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.qr_code),
+            backgroundColor: Colors.green,
+            label: 'ルームに参加',
+            onTap: () => overlayScreen(context, const RoomAddScreen()),
+          ),
+        ],
       ),
     );
   }
