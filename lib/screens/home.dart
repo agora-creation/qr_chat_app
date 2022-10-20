@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
         automaticallyImplyLeading: false,
-        title: const Text('トークルーム一覧'),
+        title: const Text('ルーム一覧'),
         actions: [
           IconButton(
             onPressed: () => overlayScreen(context, const UserScreen()),
@@ -29,6 +29,9 @@ class HomeScreen extends StatelessWidget {
               border: Border(bottom: BorderSide(color: Color(0xFFCCCCCC))),
             ),
             child: ListTile(
+              leading: const CircleAvatar(
+                backgroundColor: Colors.green,
+              ),
               title: const Text('雑談部屋'),
               subtitle: const Text('明日、何時に集合？'),
               trailing: const Icon(Icons.chevron_right),
