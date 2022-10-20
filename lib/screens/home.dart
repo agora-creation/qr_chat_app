@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:qr_chat_app/helpers/functions.dart';
+import 'package:qr_chat_app/screens/chat.dart';
+import 'package:qr_chat_app/screens/room_add.dart';
+import 'package:qr_chat_app/screens/user.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,7 +16,7 @@ class HomeScreen extends StatelessWidget {
         title: const Text('トークルーム一覧'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => overlayScreen(context, const UserScreen()),
             icon: const Icon(Icons.person),
           ),
         ],
@@ -24,16 +28,17 @@ class HomeScreen extends StatelessWidget {
             decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: Color(0xFFCCCCCC))),
             ),
-            child: const ListTile(
-              title: Text('雑談部屋'),
-              subtitle: Text('明日、何時に集合？'),
-              trailing: Icon(Icons.navigate_next),
+            child: ListTile(
+              title: const Text('雑談部屋'),
+              subtitle: const Text('明日、何時に集合？'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => pushScreen(context, const ChatScreen()),
             ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () => overlayScreen(context, const RoomAddScreen()),
         label: const Text('ルーム追加'),
         icon: const Icon(Icons.add),
         backgroundColor: Colors.blue,
