@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () => overlayScreen(context, const UserScreen()),
-            icon: const Icon(Icons.person),
+            icon: const Icon(Icons.account_circle),
           ),
         ],
       ),
