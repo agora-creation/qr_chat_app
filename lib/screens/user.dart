@@ -36,6 +36,10 @@ class _UserScreenState extends State<UserScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         children: [
+          const CircleAvatar(
+            backgroundColor: Colors.grey,
+            radius: 50,
+          ),
           ColorPicker(
             pickerColor: pickerColor,
             onColorChanged: changeColor,
