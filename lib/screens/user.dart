@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
-class UserScreen extends StatelessWidget {
+class UserScreen extends StatefulWidget {
   const UserScreen({Key? key}) : super(key: key);
+
+  @override
+  State<UserScreen> createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
+  Color pickerColor = const Color(0xff443a49);
+  Color currentColor = const Color(0xff443a49);
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +36,13 @@ class UserScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         children: [
+          ColorPicker(
+            pickerColor: pickerColor,
+            onColorChanged: changeColor,
+            enableAlpha: false,
+            showLabel: false,
+          ),
+          const SizedBox(height: 16),
           CustomTextFormField(
             controller: TextEditingController(),
             keyboardType: TextInputType.name,
