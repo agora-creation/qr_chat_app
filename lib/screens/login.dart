@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
+import 'package:qr_chat_app/helpers/style.dart';
+import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/home.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
@@ -23,20 +33,11 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text(
-                      'QR-CHAT',
-                      style: TextStyle(
-                        color: Color(0xFF333333),
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'SourceHanSerif-Bold',
-                        letterSpacing: 1,
-                      ),
-                    ),
+                    const Text('QR-CHAT', style: kTitleStyle),
                     Column(
                       children: [
                         CustomTextFormField(
-                          controller: TextEditingController(),
+                          controller: userProvider.emailController,
                           keyboardType: TextInputType.emailAddress,
                           labelText: 'メールアドレス',
                           iconData: Icons.email,
@@ -46,7 +47,13 @@ class LoginScreen extends StatelessWidget {
                           labelText: '認証する',
                           labelColor: Colors.white,
                           backgroundColor: Colors.blue,
-                          onPressed: () {
+                          onPressed: () async {
+                            String? errorText = await userProvider.login();
+                            if (errorText != null) {
+                              return;
+                            }
+                            userProvider.clearController();
+                            if (!mounted) return;
                             pushReplacementScreen(context, const HomeScreen());
                           },
                         ),

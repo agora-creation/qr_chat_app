@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:qr_chat_app/helpers/style.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,16 +19,7 @@ class SplashScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const [
-                  Text(
-                    'QR-CHAT',
-                    style: TextStyle(
-                      color: Color(0xFF333333),
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'SourceHanSerif-Bold',
-                      letterSpacing: 1,
-                    ),
-                  ),
+                  Text('QR-CHAT', style: kTitleStyle),
                   SpinKitDancingSquare(
                     size: 48,
                     color: Color(0xFF333333),

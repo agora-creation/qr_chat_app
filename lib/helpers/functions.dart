@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -30,4 +32,19 @@ String dateText(String format, DateTime? date) {
     ret = DateFormat(format, 'ja').format(date);
   }
   return ret;
+}
+
+String randomString(int length) {
+  const randomChars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charsLength = randomChars.length;
+  final rand = Random();
+  final codeUnits = List.generate(
+    length,
+    (index) {
+      final n = rand.nextInt(charsLength);
+      return randomChars.codeUnitAt(n);
+    },
+  );
+  return String.fromCharCodes(codeUnits);
 }

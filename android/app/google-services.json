@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "430439706709",
+    "project_id": "qr-chat-3a8e7",
+    "storage_bucket": "qr-chat-3a8e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430439706709:android:bd21d94b655bec7cc564dc",
+        "android_client_info": {
+          "package_name": "com.agoraacreation.qr_chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430439706709-033qhoqnt6mspkimamdt1a0edpvmr33q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDle_Akx9CC9EE9Q73hFddwWHTGlhF2c0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430439706709-033qhoqnt6mspkimamdt1a0edpvmr33q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "430439706709-mr15g90hqu0rh0pnovp8l9msra0q76aq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.agoraacreation.qrChatApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

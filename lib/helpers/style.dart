@@ -25,3 +25,11 @@ ThemeData themeData() {
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 }
+
+const TextStyle kTitleStyle = TextStyle(
+  color: Color(0xFF333333),
+  fontSize: 40,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'SourceHanSerif-Bold',
+  letterSpacing: 1,
+);
