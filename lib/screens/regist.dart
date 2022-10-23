@@ -6,19 +6,18 @@ import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/helpers/style.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/home.dart';
-import 'package:qr_chat_app/screens/regist.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
 import 'package:qr_chat_app/widgets/link_text.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegistScreen extends StatefulWidget {
+  const RegistScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegistScreen> createState() => _RegistScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistScreenState extends State<RegistScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -40,6 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     Column(
                       children: [
                         CustomTextFormField(
+                          controller: userProvider.nameController,
+                          keyboardType: TextInputType.name,
+                          labelText: 'あなたのお名前',
+                          iconData: Icons.short_text,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextFormField(
                           controller: userProvider.emailController,
                           keyboardType: TextInputType.emailAddress,
                           labelText: 'メールアドレス',
@@ -54,11 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 16),
                         RoundLgButton(
-                          labelText: 'ログイン',
+                          labelText: '登録する',
                           labelColor: Colors.white,
                           backgroundColor: Colors.blue,
                           onPressed: () async {
-                            String? errorText = await userProvider.login();
+                            String? errorText = await userProvider.regist();
                             if (errorText != null) {
                               if (!mounted) return;
                               errorDialog(context, errorText);
@@ -71,11 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 16),
                         LinkText(
-                          onTap: () => pushScreen(
-                            context,
-                            const RegistScreen(),
-                          ),
-                          labelText: '初めての方はコチラから',
+                          onTap: () => Navigator.pop(context),
+                          labelText: '登録済みの方はコチラから',
                         ),
                       ],
                     ),

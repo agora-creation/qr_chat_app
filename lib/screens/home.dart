@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
+import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/chat.dart';
 import 'package:qr_chat_app/screens/room_add.dart';
 import 'package:qr_chat_app/screens/user.dart';
@@ -10,6 +12,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
@@ -17,13 +21,16 @@ class HomeScreen extends StatelessWidget {
         title: const Text('ルーム一覧'),
         actions: [
           IconButton(
-            onPressed: () => overlayScreen(context, const UserScreen()),
+            onPressed: () => overlayScreen(
+              context,
+              UserScreen(userProvider: userProvider),
+            ),
             icon: const Icon(Icons.account_circle),
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: 10,
+        itemCount: 5,
         itemBuilder: (_, index) {
           return Container(
             decoration: const BoxDecoration(
