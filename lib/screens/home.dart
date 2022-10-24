@@ -50,16 +50,18 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: const IconThemeData(size: 22),
         curve: Curves.bounceIn,
         children: [
           SpeedDialChild(
-            child: const Icon(Icons.create),
+            child: const Icon(Icons.create, color: Colors.white),
             backgroundColor: Colors.blue,
             label: 'ルームを作成',
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             onTap: () => overlayScreen(context, const RoomAddScreen()),
           ),
           SpeedDialChild(
-            child: const Icon(Icons.qr_code),
+            child: const Icon(Icons.qr_code, color: Colors.white),
             backgroundColor: Colors.green,
             label: 'ルームに参加',
             onTap: () => overlayScreen(context, const RoomAddScreen()),

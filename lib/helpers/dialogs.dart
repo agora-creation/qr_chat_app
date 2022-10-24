@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/widgets/custom_text_button.dart';
 
 void errorDialog(BuildContext context, String msg) {
@@ -41,21 +40,28 @@ void errorDialog(BuildContext context, String msg) {
   );
 }
 
-void colorDialog(BuildContext context, UserProvider userProvider) {
+void colorDialog(
+  BuildContext context,
+  Color colorController,
+  Function(Color color) changeColor,
+) {
   showDialog(
     barrierDismissible: false,
     context: context,
-    builder: (_) => ColorAlertDialog(userProvider: userProvider),
-  ).then((value) async {
-    await userProvider.reloadUser();
-  });
+    builder: (_) => ColorAlertDialog(
+      colorController: colorController,
+      changeColor: changeColor,
+    ),
+  );
 }
 
 class ColorAlertDialog extends StatefulWidget {
-  final UserProvider userProvider;
+  final Color colorController;
+  final Function(Color color) changeColor;
 
   const ColorAlertDialog({
-    required this.userProvider,
+    required this.colorController,
+    required this.changeColor,
     Key? key,
   }) : super(key: key);
 
@@ -73,8 +79,7 @@ class _ColorAlertDialogState extends State<ColorAlertDialog> {
   @override
   void initState() {
     super.initState();
-    String color = widget.userProvider.user?.color ?? 'FFFFFFFF';
-    pickerColor = Color(int.parse(color, radix: 16));
+    pickerColor = widget.colorController;
   }
 
   @override
@@ -101,18 +106,10 @@ class _ColorAlertDialogState extends State<ColorAlertDialog> {
                 onPressed: () => Navigator.pop(context),
               ),
               CustomTextButton(
-                labelText: '反映する',
+                labelText: '決定',
                 backgroundColor: Colors.blue,
-                onPressed: () async {
-                  String? errorText = await widget.userProvider.updateColor(
-                    pickerColor,
-                  );
-                  if (errorText != null) {
-                    if (!mounted) return;
-                    errorDialog(context, errorText);
-                    return;
-                  }
-
+                onPressed: () {
+                  widget.changeColor(pickerColor);
                   if (!mounted) return;
                   Navigator.pop(context);
                 },

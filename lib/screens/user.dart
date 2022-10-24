@@ -20,6 +20,12 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+  Color colorController = const Color(0xFFFFFFFF);
+
+  void changeColor(Color color) {
+    setState(() => colorController = color);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -27,12 +33,12 @@ class _UserScreenState extends State<UserScreen> {
     widget.userProvider.emailController.text = user?.email ?? '';
     widget.userProvider.passwordController.text = user?.password ?? '';
     widget.userProvider.nameController.text = user?.name ?? '';
+    String code = widget.userProvider.user?.color ?? 'FFFFFFFF';
+    colorController = Color(int.parse(code, radix: 16));
   }
 
   @override
   Widget build(BuildContext context) {
-    String color = widget.userProvider.user?.color ?? 'FFFFFFFF';
-
     return Scaffold(
       appBar: AppBar(
         shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
@@ -50,9 +56,13 @@ class _UserScreenState extends State<UserScreen> {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         children: [
           GestureDetector(
-            onTap: () => colorDialog(context, widget.userProvider),
+            onTap: () => colorDialog(
+              context,
+              colorController,
+              changeColor,
+            ),
             child: CircleAvatar(
-              backgroundColor: Color(int.parse(color, radix: 16)),
+              backgroundColor: colorController,
               radius: 80,
             ),
           ),
@@ -77,13 +87,15 @@ class _UserScreenState extends State<UserScreen> {
             labelText: 'パスワード',
             iconData: Icons.lock,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           RoundLgButton(
             labelText: '変更内容を保存',
             labelColor: Colors.white,
             backgroundColor: Colors.blue,
             onPressed: () async {
-              String? errorText = await widget.userProvider.updateInfo();
+              String? errorText = await widget.userProvider.updateInfo(
+                colorController,
+              );
               if (errorText != null) {
                 if (!mounted) return;
                 errorDialog(context, errorText);
@@ -95,7 +107,7 @@ class _UserScreenState extends State<UserScreen> {
               Navigator.of(context, rootNavigator: true).pop();
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           RoundLgButton(
             labelText: 'ログアウト',
             labelColor: Colors.red,

@@ -79,7 +79,7 @@ class UserProvider with ChangeNotifier {
     return errorText;
   }
 
-  Future<String?> updateInfo() async {
+  Future<String?> updateInfo(Color color) async {
     String? errorText;
     if (nameController.text.isEmpty) errorText = 'お名前を入力してください。';
     if (emailController.text.isEmpty) errorText = 'メールアドレスを入力してください。';
@@ -90,18 +90,6 @@ class UserProvider with ChangeNotifier {
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),
         'password': passwordController.text.trim(),
-      });
-    } catch (e) {
-      errorText = '情報の更新に失敗しました。';
-    }
-    return errorText;
-  }
-
-  Future<String?> updateColor(Color color) async {
-    String? errorText;
-    try {
-      userService.update({
-        'id': _user?.id,
         'color': color.value.toRadixString(16),
       });
     } catch (e) {
