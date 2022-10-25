@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_chat_app/helpers/style.dart';
+import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/home.dart';
 import 'package:qr_chat_app/screens/login.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: UserProvider.initialize()),
+        ChangeNotifierProvider.value(value: RoomProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -93,7 +93,7 @@ class _UserScreenState extends State<UserScreen> {
             labelColor: Colors.white,
             backgroundColor: Colors.blue,
             onPressed: () async {
-              String? errorText = await widget.userProvider.updateInfo(
+              String? errorText = await widget.userProvider.update(
                 colorController,
               );
               if (errorText != null) {

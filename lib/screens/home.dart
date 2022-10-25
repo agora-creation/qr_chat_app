@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
+import 'package:qr_chat_app/models/room.dart';
+import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/chat.dart';
 import 'package:qr_chat_app/screens/room_add.dart';
@@ -13,6 +15,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final roomProvider = Provider.of<RoomProvider>(context);
+    List<RoomModel> rooms = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -29,44 +33,47 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (_, index) {
-          return Container(
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Color(0xFFCCCCCC))),
-            ),
-            child: ListTile(
-              leading: const CircleAvatar(
-                backgroundColor: Colors.green,
-              ),
-              title: const Text('雑談部屋'),
-              subtitle: const Text('明日、何時に集合？'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => pushScreen(context, const ChatScreen()),
-            ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: roomProvider.streamList(),
+        builder: (context, snapshot) {
+          rooms.clear();
+          if (snapshot.hasData) {
+            for (DocumentSnapshot<Map<String, dynamic>> doc
+                in snapshot.data!.docs) {
+              rooms.add(RoomModel.fromSnapshot(doc));
+            }
+          }
+          return ListView.builder(
+            itemCount: rooms.length,
+            itemBuilder: (_, index) {
+              RoomModel room = rooms[index];
+              String code = room.color;
+              return Container(
+                decoration: const BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Color(0xFFCCCCCC))),
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Color(int.parse(code, radix: 16)),
+                  ),
+                  title: Text(room.name),
+                  subtitle: const Text('明日、何時に集合？'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => pushScreen(context, const ChatScreen()),
+                ),
+              );
+            },
           );
         },
       ),
-      floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.menu_close,
-        animatedIconTheme: const IconThemeData(size: 22),
-        curve: Curves.bounceIn,
-        children: [
-          SpeedDialChild(
-            child: const Icon(Icons.create, color: Colors.white),
-            backgroundColor: Colors.blue,
-            label: 'ルームを作成',
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            onTap: () => overlayScreen(context, const RoomAddScreen()),
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.qr_code, color: Colors.white),
-            backgroundColor: Colors.green,
-            label: 'ルームに参加',
-            onTap: () => overlayScreen(context, const RoomAddScreen()),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => overlayScreen(
+          context,
+          RoomAddScreen(roomProvider: roomProvider),
+        ),
+        label: const Text('ルーム追加'),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
     );
   }

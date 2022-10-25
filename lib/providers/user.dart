@@ -79,18 +79,26 @@ class UserProvider with ChangeNotifier {
     return errorText;
   }
 
-  Future<String?> updateInfo(Color color) async {
+  Future<String?> update(Color color) async {
     String? errorText;
     if (nameController.text.isEmpty) errorText = 'お名前を入力してください。';
     if (emailController.text.isEmpty) errorText = 'メールアドレスを入力してください。';
     if (passwordController.text.isEmpty) errorText = 'パスワードを入力してください。';
     try {
-      userService.update({
-        'id': _user?.id,
-        'name': nameController.text.trim(),
-        'email': emailController.text.trim(),
-        'password': passwordController.text.trim(),
-        'color': color.value.toRadixString(16),
+      await auth?.currentUser
+          ?.updateEmail(emailController.text.trim())
+          .then((value) async {
+        await auth?.currentUser
+            ?.updatePassword(passwordController.text.trim())
+            .then((value) {
+          userService.update({
+            'id': _user?.id,
+            'name': nameController.text.trim(),
+            'email': emailController.text.trim(),
+            'password': passwordController.text.trim(),
+            'color': color.value.toRadixString(16),
+          });
+        });
       });
     } catch (e) {
       errorText = '情報の更新に失敗しました。';
