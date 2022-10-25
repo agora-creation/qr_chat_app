@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:qr_chat_app/helpers/dialogs.dart';
+import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
 class RoomAddScreen extends StatefulWidget {
   final RoomProvider roomProvider;
+  final UserModel? user;
 
   const RoomAddScreen({
     required this.roomProvider,
+    this.user,
     Key? key,
   }) : super(key: key);
 
@@ -67,7 +70,8 @@ class _RoomAddScreenState extends State<RoomAddScreen> {
             backgroundColor: Colors.blue,
             onPressed: () async {
               String? errorText = await widget.roomProvider.create(
-                colorController,
+                user: widget.user,
+                color: colorController,
               );
               if (errorText != null) {
                 if (!mounted) return;

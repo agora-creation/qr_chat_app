@@ -69,7 +69,10 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => overlayScreen(
           context,
-          RoomAddScreen(roomProvider: roomProvider),
+          RoomAddScreen(
+            roomProvider: roomProvider,
+            user: userProvider.user,
+          ),
         ),
         label: const Text('ルーム追加'),
         icon: const Icon(Icons.add),
