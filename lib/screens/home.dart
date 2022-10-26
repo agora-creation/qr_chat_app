@@ -5,7 +5,7 @@ import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/room.dart';
 import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/user.dart';
-import 'package:qr_chat_app/screens/chat.dart';
+import 'package:qr_chat_app/screens/room.dart';
 import 'package:qr_chat_app/screens/room_add.dart';
 import 'package:qr_chat_app/screens/user.dart';
 
@@ -59,7 +59,10 @@ class HomeScreen extends StatelessWidget {
                   title: Text(room.name),
                   subtitle: const Text('明日、何時に集合？'),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => pushScreen(context, const ChatScreen()),
+                  onTap: () => pushScreen(
+                    context,
+                    RoomScreen(roomProvider: roomProvider, room: room),
+                  ),
                 ),
               );
             },

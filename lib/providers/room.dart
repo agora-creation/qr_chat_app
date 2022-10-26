@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_chat_app/models/room.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/services/room.dart';
 
@@ -33,6 +34,37 @@ class RoomProvider with ChangeNotifier {
       });
     } catch (e) {
       errorText = 'ルームの追加に失敗しました。';
+    }
+    return errorText;
+  }
+
+  Future<String?> update({
+    RoomModel? room,
+    Color? color,
+  }) async {
+    String? errorText;
+    if (room == null) errorText = '情報の更新に失敗しました。';
+    if (color == null) errorText = '情報の更新に失敗しました。';
+    if (nameController.text.isEmpty) errorText = 'ルームの名前を入力してください。';
+    try {
+      roomService.update({
+        'id': room?.id,
+        'name': nameController.text.trim(),
+        'color': color?.value.toRadixString(16),
+      });
+    } catch (e) {
+      errorText = '情報の更新に失敗しました。';
+    }
+    return errorText;
+  }
+
+  Future<String?> delete({RoomModel? room}) async {
+    String? errorText;
+    if (room == null) errorText = 'ルームの削除に失敗しました。';
+    try {
+      roomService.delete({'id': room?.id});
+    } catch (e) {
+      errorText = 'ルームの削除に失敗しました。';
     }
     return errorText;
   }
