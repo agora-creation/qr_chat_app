@@ -99,7 +99,7 @@ class _RoomSettingScreenState extends State<RoomSettingScreen> {
           RoundLgButton(
             labelText: 'ルームから退室',
             labelColor: Colors.red,
-            backgroundColor: Colors.red,
+            borderColor: Colors.red,
             onPressed: () async {
               String? errorText = await widget.roomProvider.updateExit(
                 room: widget.room,
