@@ -60,11 +60,11 @@ class RoomProvider with ChangeNotifier {
 
   Future<String?> delete({RoomModel? room}) async {
     String? errorText;
-    if (room == null) errorText = 'ルームの削除に失敗しました。';
+    if (room == null) errorText = 'ルームの消去に失敗しました。';
     try {
       roomService.delete({'id': room?.id});
     } catch (e) {
-      errorText = 'ルームの削除に失敗しました。';
+      errorText = 'ルームの消去に失敗しました。';
     }
     return errorText;
   }

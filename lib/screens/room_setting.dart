@@ -94,7 +94,7 @@ class _RoomSettingScreenState extends State<RoomSettingScreen> {
           ),
           const SizedBox(height: 8),
           RoundLgButton(
-            labelText: '削除する',
+            labelText: 'ルームを消去',
             labelColor: Colors.red,
             borderColor: Colors.red,
             onPressed: () async {
