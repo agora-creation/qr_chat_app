@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/room.dart';
+import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/room.dart';
-import 'package:qr_chat_app/screens/room_add.dart';
+import 'package:qr_chat_app/screens/room_create.dart';
 import 'package:qr_chat_app/screens/user.dart';
+import 'package:qr_chat_app/widgets/custom_text_button.dart';
+import 'package:qr_chat_app/widgets/room_add_list.dart';
+import 'package:qr_chat_app/widgets/room_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -43,26 +47,20 @@ class HomeScreen extends StatelessWidget {
               rooms.add(RoomModel.fromSnapshot(doc));
             }
           }
+          if (rooms.isEmpty) {
+            return const Center(
+              child: Text('右下の「ルーム追加」をタップしてください。'),
+            );
+          }
           return ListView.builder(
             itemCount: rooms.length,
             itemBuilder: (_, index) {
               RoomModel room = rooms[index];
-              String code = room.color;
-              return Container(
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Color(0xFFCCCCCC))),
-                ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Color(int.parse(code, radix: 16)),
-                  ),
-                  title: Text(room.name),
-                  subtitle: const Text('明日、何時に集合？'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => pushScreen(
-                    context,
-                    RoomScreen(roomProvider: roomProvider, room: room),
-                  ),
+              return RoomList(
+                room: room,
+                onTap: () => pushScreen(
+                  context,
+                  RoomScreen(roomProvider: roomProvider, room: room),
                 ),
               );
             },
@@ -70,16 +68,65 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => overlayScreen(
-          context,
-          RoomAddScreen(
-            roomProvider: roomProvider,
-            user: userProvider.user,
-          ),
-        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) => RoomAddDialog(
+              roomProvider: roomProvider,
+              user: userProvider.user,
+            ),
+          );
+        },
         label: const Text('ルーム追加'),
         icon: const Icon(Icons.add),
         backgroundColor: Colors.blue,
+      ),
+    );
+  }
+}
+
+class RoomAddDialog extends StatelessWidget {
+  final RoomProvider roomProvider;
+  final UserModel? user;
+
+  const RoomAddDialog({
+    required this.roomProvider,
+    this.user,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RoomAddList(
+            iconData: Icons.create,
+            labelText: 'ルームを作成',
+            onTap: () => pushScreen(
+              context,
+              RoomCreateScreen(roomProvider: roomProvider, user: user),
+            ),
+          ),
+          RoomAddList(
+            iconData: Icons.qr_code,
+            labelText: 'ルームに参加',
+            onTap: () {},
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomTextButton(
+                labelText: 'キャンセル',
+                backgroundColor: Colors.grey,
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

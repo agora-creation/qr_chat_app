@@ -19,10 +19,7 @@ void errorDialog(BuildContext context, String msg) {
             ),
           ),
           const SizedBox(height: 16),
-          Text(
-            msg,
-            style: const TextStyle(fontSize: 16),
-          ),
+          Text(msg, style: const TextStyle(fontSize: 16)),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

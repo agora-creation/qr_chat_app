@@ -5,21 +5,21 @@ import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
-class RoomAddScreen extends StatefulWidget {
+class RoomCreateScreen extends StatefulWidget {
   final RoomProvider roomProvider;
   final UserModel? user;
 
-  const RoomAddScreen({
+  const RoomCreateScreen({
     required this.roomProvider,
     this.user,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<RoomAddScreen> createState() => _RoomAddScreenState();
+  State<RoomCreateScreen> createState() => _RoomCreateScreenState();
 }
 
-class _RoomAddScreenState extends State<RoomAddScreen> {
+class _RoomCreateScreenState extends State<RoomCreateScreen> {
   Color colorController = const Color(0xFFFFFFFF);
 
   void changeColor(Color color) {
@@ -31,15 +31,12 @@ class _RoomAddScreenState extends State<RoomAddScreen> {
     return Scaffold(
       appBar: AppBar(
         shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.chevron_left),
+        ),
         centerTitle: true,
-        title: const Text('ルーム追加'),
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-            icon: const Icon(Icons.close),
-          ),
-        ],
+        title: const Text('ルームを新規作成'),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -79,7 +76,7 @@ class _RoomAddScreenState extends State<RoomAddScreen> {
               }
               widget.roomProvider.clearController();
               if (!mounted) return;
-              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pop(context);
             },
           ),
         ],
