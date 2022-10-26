@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_chat_app/helpers/dialogs.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/room.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/room.dart';
+import 'package:qr_chat_app/screens/room_camera.dart';
 import 'package:qr_chat_app/screens/room_create.dart';
 import 'package:qr_chat_app/screens/user.dart';
 import 'package:qr_chat_app/widgets/custom_text_button.dart';
@@ -113,7 +116,16 @@ class RoomAddDialog extends StatelessWidget {
           RoomAddList(
             iconData: Icons.qr_code,
             labelText: 'ルームに参加',
-            onTap: () {},
+            onTap: () async {
+              if (await Permission.camera.request().isGranted) {
+                pushScreen(
+                  context,
+                  RoomCameraScreen(roomProvider: roomProvider, user: user),
+                );
+              } else {
+                permissionDialog(context);
+              }
+            },
           ),
           const SizedBox(height: 16),
           Row(

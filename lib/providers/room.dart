@@ -18,8 +18,8 @@ class RoomProvider with ChangeNotifier {
     Color? color,
   }) async {
     String? errorText;
-    if (user == null) errorText = 'ルームの追加に失敗しました。';
-    if (color == null) errorText = 'ルームの追加に失敗しました。';
+    if (user == null) errorText = 'ルームの作成に失敗しました。';
+    if (color == null) errorText = 'ルームの作成に失敗しました。';
     if (nameController.text.isEmpty) errorText = 'ルームの名前を入力してください。';
     List<String> userIds = [];
     userIds.add(user?.id ?? '');
@@ -33,7 +33,7 @@ class RoomProvider with ChangeNotifier {
         'createdAt': DateTime.now(),
       });
     } catch (e) {
-      errorText = 'ルームの追加に失敗しました。';
+      errorText = 'ルームの作成に失敗しました。';
     }
     return errorText;
   }
@@ -58,6 +58,28 @@ class RoomProvider with ChangeNotifier {
     return errorText;
   }
 
+  Future<String?> updateIn({
+    RoomModel? room,
+    UserModel? user,
+  }) async {
+    String? errorText;
+    if (room == null) errorText = 'ルームの参加に失敗しました。';
+    if (user == null) errorText = 'ルームの参加に失敗しました。';
+    List<String> userIds = room?.userIds ?? [];
+    if (!userIds.contains(user?.id ?? '')) {
+      userIds.add(user?.id ?? '');
+    }
+    try {
+      roomService.update({
+        'id': room?.id,
+        'userIds': userIds,
+      });
+    } catch (e) {
+      errorText = 'ルームの参加に失敗しました。';
+    }
+    return errorText;
+  }
+
   Future<String?> delete({RoomModel? room}) async {
     String? errorText;
     if (room == null) errorText = 'ルームの消去に失敗しました。';
@@ -67,6 +89,14 @@ class RoomProvider with ChangeNotifier {
       errorText = 'ルームの消去に失敗しました。';
     }
     return errorText;
+  }
+
+  Future<RoomModel?> select(String? id) async {
+    RoomModel? room;
+    await roomService.select(id).then((value) {
+      room = value;
+    });
+    return room;
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({

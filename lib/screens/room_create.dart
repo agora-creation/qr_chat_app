@@ -36,7 +36,7 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
           icon: const Icon(Icons.chevron_left),
         ),
         centerTitle: true,
-        title: const Text('ルームを新規作成'),
+        title: const Text('ルームを作成'),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -61,7 +61,7 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
           ),
           const SizedBox(height: 16),
           RoundLgButton(
-            labelText: '上記内容で追加',
+            labelText: '上記内容で作成',
             labelColor: Colors.white,
             backgroundColor: Colors.blue,
             onPressed: () async {

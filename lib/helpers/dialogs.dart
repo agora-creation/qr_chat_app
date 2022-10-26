@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_chat_app/widgets/custom_text_button.dart';
 
 void errorDialog(BuildContext context, String msg) {
@@ -117,4 +118,36 @@ class _ColorAlertDialogState extends State<ColorAlertDialog> {
       ),
     );
   }
+}
+
+void permissionDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text('カメラ機能を許可'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('QRコードを読み取る為にカメラを利用します'),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomTextButton(
+                labelText: '閉じる',
+                backgroundColor: Colors.grey,
+                onPressed: () => Navigator.pop(context),
+              ),
+              CustomTextButton(
+                labelText: 'OK',
+                backgroundColor: Colors.blue,
+                onPressed: () => openAppSettings(),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }
