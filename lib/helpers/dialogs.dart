@@ -85,7 +85,7 @@ class _ColorAlertDialogState extends State<ColorAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('あなたの色を設定'),
+      title: const Text('色を設定'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

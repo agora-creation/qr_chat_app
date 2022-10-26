@@ -35,6 +35,7 @@ class RoomScreen extends StatelessWidget {
           ),
         ],
       ),
+      body: Container(),
     );
   }
 }

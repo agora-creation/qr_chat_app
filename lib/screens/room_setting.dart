@@ -6,6 +6,7 @@ import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/screens/home.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class RoomSettingScreen extends StatefulWidget {
   final RoomProvider roomProvider;
@@ -110,6 +111,14 @@ class _RoomSettingScreenState extends State<RoomSettingScreen> {
               if (!mounted) return;
               pushReplacementScreen(context, const HomeScreen());
             },
+          ),
+          const SizedBox(height: 16),
+          Center(
+            child: QrImage(
+              data: widget.room.id,
+              version: QrVersions.auto,
+              size: 200,
+            ),
           ),
         ],
       ),

@@ -30,7 +30,6 @@ class _RoomAddScreenState extends State<RoomAddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade300,
         shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
         automaticallyImplyLeading: false,
         centerTitle: true,

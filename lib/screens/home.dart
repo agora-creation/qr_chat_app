@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: roomProvider.streamList(),
+        stream: roomProvider.streamList(user: userProvider.user),
         builder: (context, snapshot) {
           rooms.clear();
           if (snapshot.hasData) {
