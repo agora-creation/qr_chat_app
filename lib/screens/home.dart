@@ -63,7 +63,11 @@ class HomeScreen extends StatelessWidget {
                 room: room,
                 onTap: () => pushScreen(
                   context,
-                  RoomScreen(roomProvider: roomProvider, room: room),
+                  RoomScreen(
+                    roomProvider: roomProvider,
+                    room: room,
+                    user: userProvider.user!,
+                  ),
                 ),
               );
             },

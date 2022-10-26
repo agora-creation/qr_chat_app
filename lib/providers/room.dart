@@ -80,6 +80,28 @@ class RoomProvider with ChangeNotifier {
     return errorText;
   }
 
+  Future<String?> updateExit({
+    RoomModel? room,
+    UserModel? user,
+  }) async {
+    String? errorText;
+    if (room == null) errorText = 'ルームから退室に失敗しました。';
+    if (user == null) errorText = 'ルームから退室に失敗しました。';
+    List<String> userIds = room?.userIds ?? [];
+    if (userIds.contains(user?.id ?? '')) {
+      userIds.remove(user?.id ?? '');
+    }
+    try {
+      roomService.update({
+        'id': room?.id,
+        'userIds': userIds,
+      });
+    } catch (e) {
+      errorText = 'ルームから退室に失敗しました。';
+    }
+    return errorText;
+  }
+
   Future<String?> delete({RoomModel? room}) async {
     String? errorText;
     if (room == null) errorText = 'ルームの消去に失敗しました。';
