@@ -7,6 +7,7 @@ import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/room.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
+import 'package:qr_chat_app/providers/room_chat.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/room.dart';
 import 'package:qr_chat_app/screens/room_camera.dart';
@@ -23,6 +24,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final roomProvider = Provider.of<RoomProvider>(context);
+    final roomChatProvider = Provider.of<RoomChatProvider>(context);
     List<RoomModel> rooms = [];
 
     return Scaffold(
@@ -65,6 +67,7 @@ class HomeScreen extends StatelessWidget {
                   context,
                   RoomScreen(
                     roomProvider: roomProvider,
+                    roomChatProvider: roomChatProvider,
                     room: room,
                     user: userProvider.user!,
                   ),
