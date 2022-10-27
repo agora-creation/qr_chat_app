@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qr_chat_app/helpers/dialogs.dart';
-import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/room.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
-import 'package:qr_chat_app/screens/home.dart';
 import 'package:qr_chat_app/widgets/room_camera_list.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
@@ -60,7 +58,7 @@ class _RoomCamera2ScreenState extends State<RoomCamera2Screen> {
                       return;
                     }
                     if (!mounted) return;
-                    pushReplacementScreen(context, const HomeScreen());
+                    Navigator.pop(context);
                   },
                 )
               : RoundLgButton(

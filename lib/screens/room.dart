@@ -9,8 +9,7 @@ import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/room_chat.dart';
 import 'package:qr_chat_app/screens/room_qr.dart';
 import 'package:qr_chat_app/screens/room_setting.dart';
-import 'package:qr_chat_app/widgets/custom_text_button.dart';
-import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
+import 'package:qr_chat_app/widgets/message_send_field.dart';
 
 class RoomScreen extends StatefulWidget {
   final RoomProvider roomProvider;
@@ -36,88 +35,83 @@ class _RoomScreenState extends State<RoomScreen> {
     String code = widget.room.color;
     int count = widget.room.userIds.length;
     List<RoomChatModel> chats = [];
+    final focusNode = FocusNode();
 
-    return Scaffold(
-      backgroundColor: Color(int.parse(code, radix: 16)),
-      appBar: AppBar(
-        shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.chevron_left),
-        ),
-        centerTitle: true,
-        title: Text('${widget.room.name} ($count)'),
-        actions: [
-          IconButton(
-            onPressed: () => overlayScreen(
-              context,
-              RoomQRScreen(room: widget.room),
+    return Focus(
+      focusNode: focusNode,
+      child: GestureDetector(
+        onTap: focusNode.requestFocus,
+        child: Scaffold(
+          appBar: AppBar(
+            shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.chevron_left),
             ),
-            icon: const Icon(Icons.qr_code),
-          ),
-          IconButton(
-            onPressed: () => overlayScreen(
-              context,
-              RoomSettingScreen(
-                roomProvider: widget.roomProvider,
-                room: widget.room,
-                user: widget.user,
-              ),
-            ),
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: widget.roomChatProvider.streamList(
-                  room: widget.room,
-                  user: widget.user,
+            centerTitle: true,
+            title: Text('${widget.room.name} ($count)'),
+            actions: [
+              IconButton(
+                onPressed: () => overlayScreen(
+                  context,
+                  RoomQRScreen(room: widget.room),
                 ),
-                builder: (context, snapshot) {
-                  chats.clear();
-                  if (snapshot.hasData) {
-                    for (DocumentSnapshot<Map<String, dynamic>> doc
-                        in snapshot.data!.docs) {
-                      chats.add(RoomChatModel.fromSnapshot(doc));
-                    }
-                  }
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    reverse: true,
-                    itemCount: chats.length,
-                    itemBuilder: (_, index) {
-                      RoomChatModel chat = chats[index];
-                      return MessageBalloon(
-                        chat: chat,
-                        isMe: widget.user.id == chat.userId,
-                      );
-                    },
-                  );
-                },
+                icon: const Icon(Icons.qr_code),
               ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: CustomTextFormField(
-                    controller: widget.roomChatProvider.messageController,
-                    keyboardType: TextInputType.multiline,
-                    labelText: '何かメッセージ',
+              IconButton(
+                onPressed: () => overlayScreen(
+                  context,
+                  RoomSettingScreen(
+                    roomProvider: widget.roomProvider,
+                    room: widget.room,
+                    user: widget.user,
                   ),
                 ),
-                CustomTextButton(
-                  labelText: '送信',
-                  backgroundColor: Colors.grey,
+                icon: const Icon(Icons.settings),
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Color(int.parse(code, radix: 16)),
+                    child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      stream: widget.roomChatProvider.streamList(
+                        room: widget.room,
+                      ),
+                      builder: (context, snapshot) {
+                        chats.clear();
+                        if (snapshot.hasData) {
+                          for (DocumentSnapshot<Map<String, dynamic>> doc
+                              in snapshot.data!.docs) {
+                            chats.add(RoomChatModel.fromSnapshot(doc));
+                          }
+                        }
+                        return ListView.builder(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 16,
+                          ),
+                          reverse: true,
+                          itemCount: chats.length,
+                          itemBuilder: (_, index) {
+                            RoomChatModel chat = chats[index];
+                            return MessageBalloon(
+                              chat: chat,
+                              isMe: widget.user.id == chat.userId,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                MessageSendField(
+                  controller: widget.roomChatProvider.messageController,
                   onPressed: () async {
                     String? errorText = await widget.roomChatProvider.create(
                       room: widget.room,
@@ -129,11 +123,12 @@ class _RoomScreenState extends State<RoomScreen> {
                       return;
                     }
                     widget.roomChatProvider.clearController();
+                    focusNode.unfocus();
                   },
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -152,34 +147,72 @@ class MessageBalloon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment:
-            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Text(chat.userId),
-          Material(
-            elevation: 4,
-            borderRadius: isMe
-                ? const BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    bottomLeft: Radius.circular(24),
-                    bottomRight: Radius.circular(24),
-                  )
-                : const BorderRadius.only(
-                    topRight: Radius.circular(24),
-                    bottomLeft: Radius.circular(24),
-                    bottomRight: Radius.circular(24),
-                  ),
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(chat.message),
+    if (isMe) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(chat.message),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+            Text(
+              dateText('MM/dd HH:mm', chat.createdAt),
+              style: const TextStyle(fontSize: 12, color: Colors.black54),
+            ),
+          ],
+        ),
+      );
+    } else {
+      String code = chat.userColor;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              chat.userName,
+              style: const TextStyle(fontSize: 12, color: Colors.black54),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  backgroundColor: Color(int.parse(code, radix: 16)),
+                  radius: 16,
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Material(
+                      elevation: 4,
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.blue.shade200,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(chat.message),
+                      ),
+                    ),
+                    Text(
+                      dateText('MM/dd HH:mm', chat.createdAt),
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

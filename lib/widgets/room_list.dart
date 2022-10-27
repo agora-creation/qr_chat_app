@@ -17,6 +17,7 @@ class RoomList extends StatelessWidget {
     int count = room.userIds.length;
 
     return Container(
+      padding: const EdgeInsets.all(4),
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: Color(0xFFCCCCCC))),
       ),
@@ -28,6 +29,7 @@ class RoomList extends StatelessWidget {
         subtitle: room.lastMessage != ''
             ? Text(
                 room.lastMessage,
+                maxLines: 1,
                 style: const TextStyle(overflow: TextOverflow.ellipsis),
               )
             : null,

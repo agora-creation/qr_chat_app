@@ -13,6 +13,7 @@ class RoomChatProvider with ChangeNotifier {
 
   void clearController() {
     messageController.text = '';
+    notifyListeners();
   }
 
   Future<String?> create({
@@ -44,16 +45,12 @@ class RoomChatProvider with ChangeNotifier {
     return errorText;
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
-    RoomModel? room,
-    UserModel? user,
-  }) {
+  Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({RoomModel? room}) {
     Stream<QuerySnapshot<Map<String, dynamic>>>? ret;
     ret = FirebaseFirestore.instance
         .collection('room')
         .doc(room?.id ?? 'error')
         .collection('chat')
-        .where('userId', isEqualTo: user?.id ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
     return ret;
