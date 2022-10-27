@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_chat_app/models/room.dart';
 import 'package:qr_chat_app/models/user.dart';
+import 'package:qr_chat_app/services/room.dart';
 import 'package:qr_chat_app/services/room_chat.dart';
 
 class RoomChatProvider with ChangeNotifier {
+  RoomService roomService = RoomService();
   RoomChatService roomChatService = RoomChatService();
 
   TextEditingController messageController = TextEditingController();
@@ -27,8 +29,14 @@ class RoomChatProvider with ChangeNotifier {
         'id': id,
         'roomId': room?.id,
         'userId': user?.id,
+        'userName': user?.name,
+        'userColor': user?.color,
         'message': messageController.text,
         'createdAt': DateTime.now(),
+      });
+      roomService.update({
+        'id': room?.id,
+        'lastMessage': messageController.text,
       });
     } catch (e) {
       errorText = '送信に失敗しました。';

@@ -25,7 +25,12 @@ class RoomList extends StatelessWidget {
           backgroundColor: Color(int.parse(code, radix: 16)),
         ),
         title: Text('${room.name} ($count)'),
-        subtitle: const Text('明日、何時に集合？'),
+        subtitle: room.lastMessage != ''
+            ? Text(
+                room.lastMessage,
+                style: const TextStyle(overflow: TextOverflow.ellipsis),
+              )
+            : null,
         onTap: onTap,
       ),
     );

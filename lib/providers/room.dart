@@ -30,6 +30,7 @@ class RoomProvider with ChangeNotifier {
         'name': nameController.text.trim(),
         'color': color?.value.toRadixString(16),
         'userIds': userIds,
+        'lastMessage': '',
         'createdAt': DateTime.now(),
       });
     } catch (e) {

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_chat_app/helpers/dialogs.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/room.dart';
+import 'package:qr_chat_app/models/room_chat.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/room_chat.dart';
@@ -33,6 +35,7 @@ class _RoomScreenState extends State<RoomScreen> {
   Widget build(BuildContext context) {
     String code = widget.room.color;
     int count = widget.room.userIds.length;
+    List<RoomChatModel> chats = [];
 
     return Scaffold(
       backgroundColor: Color(int.parse(code, radix: 16)),
@@ -70,6 +73,38 @@ class _RoomScreenState extends State<RoomScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Expanded(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: widget.roomChatProvider.streamList(
+                  room: widget.room,
+                  user: widget.user,
+                ),
+                builder: (context, snapshot) {
+                  chats.clear();
+                  if (snapshot.hasData) {
+                    for (DocumentSnapshot<Map<String, dynamic>> doc
+                        in snapshot.data!.docs) {
+                      chats.add(RoomChatModel.fromSnapshot(doc));
+                    }
+                  }
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
+                    ),
+                    reverse: true,
+                    itemCount: chats.length,
+                    itemBuilder: (_, index) {
+                      RoomChatModel chat = chats[index];
+                      return MessageBalloon(
+                        chat: chat,
+                        isMe: widget.user.id == chat.userId,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -100,6 +135,50 @@ class _RoomScreenState extends State<RoomScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MessageBalloon extends StatelessWidget {
+  final RoomChatModel chat;
+  final bool isMe;
+
+  const MessageBalloon({
+    required this.chat,
+    required this.isMe,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Text(chat.userId),
+          Material(
+            elevation: 4,
+            borderRadius: isMe
+                ? const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    bottomLeft: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
+                  )
+                : const BorderRadius.only(
+                    topRight: Radius.circular(24),
+                    bottomLeft: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
+                  ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(chat.message),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -61,7 +61,7 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
           ),
           const SizedBox(height: 16),
           RoundLgButton(
-            labelText: '上記内容で作成',
+            labelText: '作成する',
             labelColor: Colors.white,
             backgroundColor: Colors.blue,
             onPressed: () async {

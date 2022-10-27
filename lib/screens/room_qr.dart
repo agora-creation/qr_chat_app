@@ -18,7 +18,7 @@ class RoomQRScreen extends StatelessWidget {
         shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: Text('${room.name}のQRコード'),
+        title: const Text('ルームのQRコード'),
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),

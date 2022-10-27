@@ -46,7 +46,7 @@ class _RoomSettingScreenState extends State<RoomSettingScreen> {
         shape: const Border(bottom: BorderSide(color: Color(0xFF333333))),
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: Text('${widget.room.name}の設定'),
+        title: const Text('ルームの設定'),
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
