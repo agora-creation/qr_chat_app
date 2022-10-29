@@ -114,6 +114,21 @@ class UserProvider with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
+  Future<String?> delete() async {
+    String? errorText;
+    try {
+      userService.delete({'id': _user?.id});
+      await auth?.currentUser?.delete();
+      _status = Status.unauthenticated;
+      _user = null;
+      notifyListeners();
+      Future.delayed(Duration.zero);
+    } catch (e) {
+      errorText = '削除に失敗しました。';
+    }
+    return errorText;
+  }
+
   Future reloadUser() async {
     _user = await userService.select(id: _fUser?.uid);
     notifyListeners();

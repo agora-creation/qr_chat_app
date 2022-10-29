@@ -5,6 +5,7 @@ import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/login.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
+import 'package:qr_chat_app/widgets/link_text.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
 class UserScreen extends StatefulWidget {
@@ -114,9 +115,30 @@ class _UserScreenState extends State<UserScreen> {
             borderColor: Colors.red,
             onPressed: () async {
               await widget.userProvider.logout();
+              await widget.userProvider.reloadUser();
+              await widget.userProvider.reloadUser();
+              widget.userProvider.clearController();
               if (!mounted) return;
               pushReplacementScreen(context, const LoginScreen());
             },
+          ),
+          const SizedBox(height: 40),
+          Center(
+            child: LinkText(
+              onTap: () async {
+                String? errorText = await widget.userProvider.delete();
+                if (errorText != null) {
+                  if (!mounted) return;
+                  errorDialog(context, errorText);
+                  return;
+                }
+                await widget.userProvider.reloadUser();
+                widget.userProvider.clearController();
+                if (!mounted) return;
+                pushReplacementScreen(context, const LoginScreen());
+              },
+              labelText: 'このアカウントを削除する',
+            ),
           ),
         ],
       ),
