@@ -18,6 +18,12 @@ class RegistScreen extends StatefulWidget {
 }
 
 class _RegistScreenState extends State<RegistScreen> {
+  bool isAgree = false;
+
+  void changeAgree(bool value) {
+    setState(() => isAgree = value);
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -59,22 +65,38 @@ class _RegistScreenState extends State<RegistScreen> {
                           iconData: Icons.lock,
                         ),
                         const SizedBox(height: 16),
-                        RoundLgButton(
-                          labelText: '登録する',
-                          labelColor: Colors.white,
-                          backgroundColor: Colors.blue,
-                          onPressed: () async {
-                            String? errorText = await userProvider.regist();
-                            if (errorText != null) {
-                              if (!mounted) return;
-                              errorDialog(context, errorText);
-                              return;
-                            }
-                            userProvider.clearController();
-                            if (!mounted) return;
-                            pushReplacementScreen(context, const HomeScreen());
+                        CheckboxListTile(
+                          value: isAgree,
+                          title: const Text('利用規約に同意する'),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (value) {
+                            agreeDialog(context, changeAgree);
                           },
                         ),
+                        isAgree
+                            ? RoundLgButton(
+                                labelText: '登録する',
+                                labelColor: Colors.white,
+                                backgroundColor: Colors.blue,
+                                onPressed: () async {
+                                  String? errorText =
+                                      await userProvider.regist();
+                                  if (errorText != null) {
+                                    if (!mounted) return;
+                                    errorDialog(context, errorText);
+                                    return;
+                                  }
+                                  userProvider.clearController();
+                                  if (!mounted) return;
+                                  pushReplacementScreen(
+                                      context, const HomeScreen());
+                                },
+                              )
+                            : const RoundLgButton(
+                                labelText: '登録する',
+                                labelColor: Colors.white,
+                                backgroundColor: Colors.grey,
+                              ),
                         const SizedBox(height: 16),
                         LinkText(
                           onTap: () => Navigator.pop(context),

@@ -19,6 +19,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isAgree = false;
+
+  void changeAgree(bool value) {
+    setState(() => isAgree = value);
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -53,22 +59,38 @@ class _LoginScreenState extends State<LoginScreen> {
                           iconData: Icons.lock,
                         ),
                         const SizedBox(height: 16),
-                        RoundLgButton(
-                          labelText: 'ログイン',
-                          labelColor: Colors.white,
-                          backgroundColor: Colors.blue,
-                          onPressed: () async {
-                            String? errorText = await userProvider.login();
-                            if (errorText != null) {
-                              if (!mounted) return;
-                              errorDialog(context, errorText);
-                              return;
-                            }
-                            userProvider.clearController();
-                            if (!mounted) return;
-                            pushReplacementScreen(context, const HomeScreen());
+                        CheckboxListTile(
+                          value: isAgree,
+                          title: const Text('利用規約に同意する'),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (value) {
+                            agreeDialog(context, changeAgree);
                           },
                         ),
+                        isAgree
+                            ? RoundLgButton(
+                                labelText: 'ログイン',
+                                labelColor: Colors.white,
+                                backgroundColor: Colors.blue,
+                                onPressed: () async {
+                                  String? errorText =
+                                      await userProvider.login();
+                                  if (errorText != null) {
+                                    if (!mounted) return;
+                                    errorDialog(context, errorText);
+                                    return;
+                                  }
+                                  userProvider.clearController();
+                                  if (!mounted) return;
+                                  pushReplacementScreen(
+                                      context, const HomeScreen());
+                                },
+                              )
+                            : const RoundLgButton(
+                                labelText: 'ログイン',
+                                labelColor: Colors.white,
+                                backgroundColor: Colors.grey,
+                              ),
                         const SizedBox(height: 16),
                         LinkText(
                           onTap: () => pushScreen(

@@ -2,6 +2,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_chat_app/widgets/custom_text_button.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+void agreeDialog(BuildContext context, Function(bool) changeAgree) {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text('利用規約'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('以下の利用規約に同意してください。'),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(color: Color(0xFF333333)),
+                bottom: BorderSide(color: Color(0xFF333333)),
+              ),
+            ),
+            height: 250,
+            child: Scrollbar(
+              controller: ScrollController(),
+              child: const WebView(
+                initialUrl: 'https://agora-c.com/qr_chat/terms_use.html',
+                javascriptMode: JavascriptMode.unrestricted,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomTextButton(
+                labelText: '同意しない',
+                backgroundColor: Colors.grey,
+                onPressed: () {
+                  changeAgree(false);
+                  Navigator.pop(context);
+                },
+              ),
+              CustomTextButton(
+                labelText: '同意する',
+                backgroundColor: Colors.blue,
+                onPressed: () {
+                  changeAgree(true);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
 void errorDialog(BuildContext context, String msg) {
   showDialog(
