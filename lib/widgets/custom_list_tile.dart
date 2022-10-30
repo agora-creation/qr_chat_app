@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:qr_chat_app/models/room.dart';
 
-class RoomCameraList extends StatelessWidget {
-  final RoomModel room;
+class CustomListTile extends StatelessWidget {
+  final String title;
+  final String value;
 
-  const RoomCameraList({required this.room, Key? key}) : super(key: key);
+  const CustomListTile({
+    required this.title,
+    required this.value,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +17,8 @@ class RoomCameraList extends StatelessWidget {
         border: Border(bottom: BorderSide(color: Color(0xFFCCCCCC))),
       ),
       child: ListTile(
-        title: const Text('ルーム名'),
-        trailing: Text(room.name),
+        title: Text(title),
+        trailing: Text(value),
       ),
     );
   }

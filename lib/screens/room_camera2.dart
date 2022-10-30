@@ -3,7 +3,7 @@ import 'package:qr_chat_app/helpers/dialogs.dart';
 import 'package:qr_chat_app/models/room.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
-import 'package:qr_chat_app/widgets/room_camera_list.dart';
+import 'package:qr_chat_app/widgets/custom_list_tile.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
 class RoomCamera2Screen extends StatefulWidget {
@@ -40,7 +40,7 @@ class _RoomCamera2ScreenState extends State<RoomCamera2Screen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         children: [
-          RoomCameraList(room: widget.room),
+          CustomListTile(title: 'ルーム名', value: widget.room.name),
           const SizedBox(height: 16),
           contain.isEmpty
               ? RoundLgButton(

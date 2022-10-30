@@ -83,21 +83,15 @@ class UserProvider with ChangeNotifier {
     String? errorText;
     if (nameController.text.isEmpty) errorText = 'お名前を入力してください。';
     if (emailController.text.isEmpty) errorText = 'メールアドレスを入力してください。';
-    if (passwordController.text.isEmpty) errorText = 'パスワードを入力してください。';
     try {
       await auth?.currentUser
           ?.updateEmail(emailController.text.trim())
-          .then((value) async {
-        await auth?.currentUser
-            ?.updatePassword(passwordController.text.trim())
-            .then((value) {
-          userService.update({
-            'id': _user?.id,
-            'name': nameController.text.trim(),
-            'email': emailController.text.trim(),
-            'password': passwordController.text.trim(),
-            'color': color.value.toRadixString(16),
-          });
+          .then((value) {
+        userService.update({
+          'id': _user?.id,
+          'name': nameController.text.trim(),
+          'email': emailController.text.trim(),
+          'color': color.value.toRadixString(16),
         });
       });
     } catch (e) {

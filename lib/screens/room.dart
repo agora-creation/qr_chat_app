@@ -7,6 +7,7 @@ import 'package:qr_chat_app/models/room_chat.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/room.dart';
 import 'package:qr_chat_app/providers/room_chat.dart';
+import 'package:qr_chat_app/screens/report.dart';
 import 'package:qr_chat_app/screens/room_qr.dart';
 import 'package:qr_chat_app/screens/room_setting.dart';
 import 'package:qr_chat_app/widgets/message_send_field.dart';
@@ -192,13 +193,19 @@ class MessageBalloon extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Material(
-                      elevation: 4,
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.blue.shade200,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(chat.message),
+                    GestureDetector(
+                      onLongPressUp: () => overlayScreen(
+                        context,
+                        ReportScreen(chat: chat),
+                      ),
+                      child: Material(
+                        elevation: 4,
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.blue.shade200,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(chat.message),
+                        ),
                       ),
                     ),
                     Text(
