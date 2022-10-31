@@ -53,6 +53,10 @@ class _RoomScreenState extends State<RoomScreen> {
             title: Text('${widget.room.name} ($count)'),
             actions: [
               IconButton(
+                onPressed: () => reportDialog(context),
+                icon: const Icon(Icons.flag),
+              ),
+              IconButton(
                 onPressed: () => overlayScreen(
                   context,
                   RoomQRScreen(room: widget.room),

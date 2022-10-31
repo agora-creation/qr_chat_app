@@ -58,6 +58,36 @@ void agreeDialog(BuildContext context, Function(bool) changeAgree) {
   );
 }
 
+void reportDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text('違反報告について'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'メッセージ内に不適切な表現などがありましたら、メッセージを長押しタップをしていただくことで、メッセージを違反報告することができます。',
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomTextButton(
+                labelText: '戻る',
+                backgroundColor: Colors.grey,
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 void errorDialog(BuildContext context, String msg) {
   showDialog(
     context: context,
