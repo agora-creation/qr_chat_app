@@ -71,6 +71,11 @@ void reportDialog(BuildContext context) {
             'メッセージ内に不適切な表現などがありましたら、メッセージを長押しタップをしていただくことで、メッセージを違反報告することができます。',
             style: TextStyle(fontSize: 16),
           ),
+          const SizedBox(height: 8),
+          const Text(
+            'またアカウントをブロックすることで、対象のアカウントからのメッセージは非表示にすることができます。',
+            style: TextStyle(fontSize: 16),
+          ),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

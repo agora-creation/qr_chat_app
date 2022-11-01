@@ -53,10 +53,6 @@ class _RoomScreenState extends State<RoomScreen> {
             title: Text('${widget.room.name} ($count)'),
             actions: [
               IconButton(
-                onPressed: () => reportDialog(context),
-                icon: const Icon(Icons.flag),
-              ),
-              IconButton(
                 onPressed: () => overlayScreen(
                   context,
                   RoomQRScreen(room: widget.room),
@@ -105,6 +101,10 @@ class _RoomScreenState extends State<RoomScreen> {
                           itemCount: chats.length,
                           itemBuilder: (_, index) {
                             RoomChatModel chat = chats[index];
+                            if (widget.user.blockUserIds
+                                .contains(chat.userId)) {
+                              return Container();
+                            }
                             return MessageBalloon(
                               chat: chat,
                               isMe: widget.user.id == chat.userId,

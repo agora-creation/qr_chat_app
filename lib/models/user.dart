@@ -6,6 +6,7 @@ class UserModel {
   String _email = '';
   String _password = '';
   String _color = '';
+  List<String> blockUserIds = [];
   String _token = '';
   DateTime _createdAt = DateTime.now();
 
@@ -23,7 +24,16 @@ class UserModel {
     _email = snapshot.data()!['email'] ?? '';
     _password = snapshot.data()!['password'] ?? '';
     _color = snapshot.data()!['color'] ?? '';
+    blockUserIds = _convertList(snapshot.data()!['blockUserIds'] ?? []);
     _token = snapshot.data()!['token'] ?? '';
     _createdAt = snapshot.data()!['createdAt'].toDate() ?? DateTime.now();
+  }
+
+  List<String> _convertList(List list) {
+    List<String> converted = [];
+    for (String value in list) {
+      converted.add(value);
+    }
+    return converted;
   }
 }

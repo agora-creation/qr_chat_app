@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_chat_app/helpers/dialogs.dart';
 import 'package:qr_chat_app/models/room_chat.dart';
 import 'package:qr_chat_app/providers/report.dart';
+import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/widgets/custom_list_tile.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
 
@@ -19,6 +20,7 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   Widget build(BuildContext context) {
     final reportProvider = Provider.of<ReportProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +38,6 @@ class _ReportScreenState extends State<ReportScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         children: [
-          CustomListTile(title: 'アカウント', value: widget.chat.userName),
           CustomListTile(title: 'メッセージ', value: widget.chat.message),
           const SizedBox(height: 16),
           RoundLgButton(
@@ -50,6 +51,26 @@ class _ReportScreenState extends State<ReportScreen> {
                 errorDialog(context, errorText);
                 return;
               }
+              if (!mounted) return;
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+          const SizedBox(height: 32),
+          CustomListTile(title: 'アカウント', value: widget.chat.userName),
+          const SizedBox(height: 16),
+          RoundLgButton(
+            labelText: 'このアカウントをブロックする',
+            labelColor: Colors.red,
+            borderColor: Colors.red,
+            onPressed: () async {
+              String? errorText =
+                  await userProvider.updateAddBlock(widget.chat.userId);
+              if (errorText != null) {
+                if (!mounted) return;
+                errorDialog(context, errorText);
+                return;
+              }
+              await userProvider.reloadUser();
               if (!mounted) return;
               Navigator.of(context, rootNavigator: true).pop();
             },

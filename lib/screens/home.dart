@@ -34,6 +34,10 @@ class HomeScreen extends StatelessWidget {
         title: const Text('ルーム一覧'),
         actions: [
           IconButton(
+            onPressed: () => reportDialog(context),
+            icon: const Icon(Icons.flag),
+          ),
+          IconButton(
             onPressed: () => overlayScreen(
               context,
               UserScreen(userProvider: userProvider),

@@ -67,6 +67,7 @@ class UserProvider with ChangeNotifier {
           'email': emailController.text.trim(),
           'password': passwordController.text.trim(),
           'color': 'FFFFFFFF',
+          'blockUserIds': [],
           'token': '',
           'createdAt': DateTime.now(),
         });
@@ -96,6 +97,24 @@ class UserProvider with ChangeNotifier {
       });
     } catch (e) {
       errorText = '情報の更新に失敗しました。';
+    }
+    return errorText;
+  }
+
+  Future<String?> updateAddBlock(String? userId) async {
+    String? errorText;
+    if (userId == null) errorText = 'アカウントのブロックに失敗しました。';
+    List<String> blockUserIds = user?.blockUserIds ?? [];
+    if (!blockUserIds.contains(userId ?? '')) {
+      blockUserIds.add(userId ?? '');
+    }
+    try {
+      userService.update({
+        'id': user?.id,
+        'blockUserIds': blockUserIds,
+      });
+    } catch (e) {
+      errorText = 'アカウントのブロックに失敗しました。';
     }
     return errorText;
   }

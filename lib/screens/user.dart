@@ -116,7 +116,6 @@ class _UserScreenState extends State<UserScreen> {
             onPressed: () async {
               await widget.userProvider.logout();
               await widget.userProvider.reloadUser();
-              await widget.userProvider.reloadUser();
               widget.userProvider.clearController();
               if (!mounted) return;
               pushReplacementScreen(context, const LoginScreen());
