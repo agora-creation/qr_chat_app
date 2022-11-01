@@ -4,6 +4,7 @@ import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/user.dart';
 import 'package:qr_chat_app/screens/login.dart';
+import 'package:qr_chat_app/widgets/custom_icon_list_tile.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
 import 'package:qr_chat_app/widgets/link_text.dart';
 import 'package:qr_chat_app/widgets/round_lg_button.dart';
@@ -87,6 +88,12 @@ class _UserScreenState extends State<UserScreen> {
             keyboardType: TextInputType.visiblePassword,
             labelText: 'パスワード',
             iconData: Icons.lock,
+          ),
+          const SizedBox(height: 8),
+          CustomIconListTile(
+            iconData: Icons.block,
+            labelText: 'ブロックリスト',
+            onTap: () {},
           ),
           const SizedBox(height: 16),
           RoundLgButton(
