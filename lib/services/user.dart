@@ -24,4 +24,18 @@ class UserService {
     });
     return user;
   }
+
+  Future<List<UserModel>> selectBlockList(List<String> blockUserIds) async {
+    List<UserModel> users = [];
+    await firestore
+        .collection(collection)
+        .where('id', whereIn: blockUserIds)
+        .get()
+        .then((value) {
+      for (DocumentSnapshot<Map<String, dynamic>> data in value.docs) {
+        users.add(UserModel.fromSnapshot(data));
+      }
+    });
+    return users;
+  }
 }

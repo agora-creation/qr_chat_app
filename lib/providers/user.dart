@@ -157,4 +157,10 @@ class UserProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<List<UserModel>> selectBlockList(List<String> blockUserIds) async {
+    List<UserModel> users = [];
+    users = await userService.selectBlockList(blockUserIds);
+    return users;
+  }
 }
