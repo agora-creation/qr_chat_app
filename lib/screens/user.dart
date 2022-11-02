@@ -3,6 +3,7 @@ import 'package:qr_chat_app/helpers/dialogs.dart';
 import 'package:qr_chat_app/helpers/functions.dart';
 import 'package:qr_chat_app/models/user.dart';
 import 'package:qr_chat_app/providers/user.dart';
+import 'package:qr_chat_app/screens/blocklist.dart';
 import 'package:qr_chat_app/screens/login.dart';
 import 'package:qr_chat_app/widgets/custom_icon_list_tile.dart';
 import 'package:qr_chat_app/widgets/custom_text_form_field.dart';
@@ -93,7 +94,10 @@ class _UserScreenState extends State<UserScreen> {
           CustomIconListTile(
             iconData: Icons.block,
             labelText: 'ブロックリスト',
-            onTap: () {},
+            onTap: () => pushScreen(
+              context,
+              BlockListScreen(userProvider: widget.userProvider),
+            ),
           ),
           const SizedBox(height: 16),
           RoundLgButton(
