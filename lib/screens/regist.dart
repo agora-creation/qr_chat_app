@@ -35,76 +35,80 @@ class _RegistScreenState extends State<RegistScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: SizedBox(
             height: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Text('QR-CHAT', style: kTitleStyle),
-                    Column(
-                      children: [
-                        CustomTextFormField(
-                          controller: userProvider.nameController,
-                          keyboardType: TextInputType.name,
-                          labelText: 'あなたのお名前',
-                          iconData: Icons.short_text,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextFormField(
-                          controller: userProvider.emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          labelText: 'メールアドレス',
-                          iconData: Icons.email,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextFormField(
-                          controller: userProvider.passwordController,
-                          keyboardType: TextInputType.visiblePassword,
-                          labelText: 'パスワード',
-                          iconData: Icons.lock,
-                        ),
-                        const SizedBox(height: 16),
-                        CheckboxListTile(
-                          value: isAgree,
-                          title: const Text('利用規約に同意する'),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: (value) {
-                            agreeDialog(context, changeAgree);
-                          },
-                        ),
-                        isAgree
-                            ? RoundLgButton(
-                                labelText: '登録する',
-                                labelColor: Colors.white,
-                                backgroundColor: Colors.blue,
-                                onPressed: () async {
-                                  String? errorText =
-                                      await userProvider.regist();
-                                  if (errorText != null) {
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 80),
+                      const Text('QR-CHAT', style: kTitleStyle),
+                      const SizedBox(height: 60),
+                      Column(
+                        children: [
+                          CustomTextFormField(
+                            controller: userProvider.nameController,
+                            keyboardType: TextInputType.name,
+                            labelText: 'あなたのお名前',
+                            iconData: Icons.short_text,
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextFormField(
+                            controller: userProvider.emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            labelText: 'メールアドレス',
+                            iconData: Icons.email,
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextFormField(
+                            controller: userProvider.passwordController,
+                            keyboardType: TextInputType.visiblePassword,
+                            labelText: 'パスワード',
+                            iconData: Icons.lock,
+                          ),
+                          const SizedBox(height: 16),
+                          CheckboxListTile(
+                            value: isAgree,
+                            title: const Text('利用規約に同意する'),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            onChanged: (value) {
+                              agreeDialog(context, changeAgree);
+                            },
+                          ),
+                          isAgree
+                              ? RoundLgButton(
+                                  labelText: '登録する',
+                                  labelColor: Colors.white,
+                                  backgroundColor: Colors.blue,
+                                  onPressed: () async {
+                                    String? errorText =
+                                        await userProvider.regist();
+                                    if (errorText != null) {
+                                      if (!mounted) return;
+                                      errorDialog(context, errorText);
+                                      return;
+                                    }
+                                    userProvider.clearController();
                                     if (!mounted) return;
-                                    errorDialog(context, errorText);
-                                    return;
-                                  }
-                                  userProvider.clearController();
-                                  if (!mounted) return;
-                                  pushReplacementScreen(
-                                      context, const HomeScreen());
-                                },
-                              )
-                            : const RoundLgButton(
-                                labelText: '登録する',
-                                labelColor: Colors.white,
-                                backgroundColor: Colors.grey,
-                              ),
-                        const SizedBox(height: 16),
-                        LinkText(
-                          onTap: () => Navigator.pop(context),
-                          labelText: '登録済みの方はコチラから',
-                        ),
-                      ],
-                    ),
-                  ],
+                                    pushReplacementScreen(
+                                        context, const HomeScreen());
+                                  },
+                                )
+                              : const RoundLgButton(
+                                  labelText: '登録する',
+                                  labelColor: Colors.white,
+                                  backgroundColor: Colors.grey,
+                                ),
+                          const SizedBox(height: 16),
+                          LinkText(
+                            onTap: () => Navigator.pop(context),
+                            labelText: '登録済みの方はコチラから',
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

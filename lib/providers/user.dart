@@ -119,6 +119,23 @@ class UserProvider with ChangeNotifier {
     return errorText;
   }
 
+  Future<String?> updateRemoveBlock(List<UserModel> users) async {
+    String? errorText;
+    List<String> blockUserIds = user?.blockUserIds ?? [];
+    for (UserModel user in users) {
+      blockUserIds.remove(user.id);
+    }
+    try {
+      userService.update({
+        'id': user?.id,
+        'blockUserIds': blockUserIds,
+      });
+    } catch (e) {
+      errorText = 'ブロックリストの解除に失敗しました。';
+    }
+    return errorText;
+  }
+
   Future logout() async {
     await auth?.signOut();
     _status = Status.unauthenticated;

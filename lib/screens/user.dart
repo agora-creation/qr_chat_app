@@ -96,7 +96,10 @@ class _UserScreenState extends State<UserScreen> {
             labelText: 'ブロックリスト',
             onTap: () => pushScreen(
               context,
-              BlockListScreen(userProvider: widget.userProvider),
+              BlockListScreen(
+                userProvider: widget.userProvider,
+                user: widget.userProvider.user!,
+              ),
             ),
           ),
           const SizedBox(height: 16),
